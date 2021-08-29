@@ -4,22 +4,23 @@ public:
         int n = nums.size();
         int temp = 0;
         int correctpos;
+        vector<int>v;
         for(int i = 0;i < n;){
-            if(nums[i] != i+1){
-                correctpos = nums[i]-1;
-                if(nums[i] != nums[correctpos]){
-                    temp = nums[i];
-                    nums[i] = nums[correctpos];
-                    nums[correctpos] = temp;
-                }
-                else{
-                    return nums[i];
-                }
+            correctpos = nums[i]-1;
+            if(nums[i] != nums[correctpos]){
+                temp = nums[i];
+                nums[i] = nums[correctpos];
+                nums[correctpos] = temp;
             }
             else{
                 i++;
             }
         }
+        for(int i = 0; i < n;i++){
+            if(nums[i] != i+1){
+                return nums[i];
+            }
+        }
         return -1;
     }
-};
+};        
