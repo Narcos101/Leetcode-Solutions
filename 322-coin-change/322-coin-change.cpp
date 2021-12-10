@@ -2,30 +2,31 @@ class Solution {
 public:
     
     int coinChange(vector<int>& coins, int sum) {
-        vector<vector<int>>dp(coins.size()+1,vector<int>(sum+1,-1));
-        int ans = calc(coins.size(),coins,sum,dp);
-        if(ans == INT_MAX-1){
+        int n = coins.size();
+        int dp[n+1][sum+1];
+        for(int i = 0; i <= sum; i++){
+            dp[0][i] = INT_MAX-1;
+        }
+        for(int i = 1; i <= n; i++){
+            dp[i][0] = 0;
+        }
+        
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j <= sum; j++){
+                if(j < coins[i-1]){
+                    dp[i][j] = dp[i-1][j];
+                }
+                else{
+                    dp[i][j] = min(1+dp[i][j-coins[i-1]], dp[i-1][j]);
+                }
+            }    
+        }
+        if(dp[n][sum] == INT_MAX-1){
             return -1;
         }
         else{
-            return ans;
-        }
-    }
-    
-    
-    int calc(int n,vector<int>& coins,int sum,vector<vector<int>>&dp){
-        if(n == 0 || sum == 0){
-            return sum == 0 ? (0):(INT_MAX-1);
-        }
-        if(dp[n][sum] != -1){
             return dp[n][sum];
         }
-        
-        if(sum < coins[n-1]){
-            return dp[n][sum] = calc(n-1,coins,sum,dp);
-        }
-        else{
-            return dp[n][sum] = min(1 + calc(n,coins,sum-coins[n-1],dp), calc(n-1,coins,sum,dp));
-        }
     }
+    
 };
