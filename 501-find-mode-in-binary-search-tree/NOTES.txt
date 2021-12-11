@@ -1,0 +1,3 @@
+I could use a hashmap for storing the number of times something comes up calculate the maximum value and then store it and return it at the end of the day.
+​
+​
