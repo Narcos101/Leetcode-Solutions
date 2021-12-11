@@ -1,0 +1,4 @@
+Approaches:-
+1. Find the gcd and perform some operations
+2. 2 * = 2,4,6,8,
+3. 3 * = 3,6,9,12
