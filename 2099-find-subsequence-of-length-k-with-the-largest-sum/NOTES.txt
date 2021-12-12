@@ -1,0 +1,2 @@
+1.Another approach would be to sort the array according to their values and and then place them on their positions using some kind of math
+2.
