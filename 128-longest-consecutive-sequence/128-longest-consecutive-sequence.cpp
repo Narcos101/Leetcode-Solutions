@@ -5,14 +5,14 @@ public:
         if(n == 0){
             return 0;
         }
-        sort(nums.begin(),nums.end());
-        int cnt = 1;
+        map<int,int>mpp;
+        for(int i = 0; i < n; i++){
+            mpp[nums[i]]++;        
+        }
         int maxx = 1;
-        for(int i = 1; i < n; i++){
-            if(nums[i] == nums[i-1]){
-                continue;
-            }                
-            else if(nums[i-1] + 1 == nums[i]){
+        int cnt = 1;
+        for(auto i: mpp){
+            if(mpp[i.first-1]){
                 cnt++;
             }
             else{
