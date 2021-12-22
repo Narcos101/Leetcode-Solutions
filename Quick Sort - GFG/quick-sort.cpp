@@ -28,16 +28,16 @@ class Solution
     int partition (int arr[], int low, int high)
     {
         int pivot = arr[high];
-        int pivotIndex = low-1;
+        int pivotIndex = low;
         for(int i = low; i <= high-1; i++){
             if(arr[i] <= pivot){
-                pivotIndex++;
-                swap(arr[pivotIndex],arr[i]);
                 
+                swap(arr[pivotIndex],arr[i]);
+                pivotIndex++;
             }
         }
-        swap(arr[pivotIndex+1],arr[high]);
-        return pivotIndex+1;
+        swap(arr[pivotIndex],arr[high]);
+        return pivotIndex;
     }
 };
 
