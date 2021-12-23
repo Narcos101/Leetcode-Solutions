@@ -16,7 +16,7 @@ public:
     bool canFinish(int n, vector<vector<int>>& pre) {
         vector<int> adj[n];
         for(auto edge : pre)
-            adj[edge[1]].push_back(edge[0]);
+            adj[edge[0]].push_back(edge[1]);
         vector<int> vis(n,0);
         
         for(int i=0;i<n;i++){
