@@ -1,3 +1,1 @@
-1. I can traverse through each path and while traversing i can find the binary representions
-2. i can normally traverse the tree but for each node i can store the binary representations till that particular node and calculate the sum which i can pass further on. TC would be O(N*H) ie for each node i am traversing the height of the tree in the worst case
-3.
+​
