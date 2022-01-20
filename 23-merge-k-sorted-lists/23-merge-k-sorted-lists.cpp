@@ -11,29 +11,30 @@
 class Solution {
 public:
     
-    ListNode* merge(ListNode *a, ListNode *b){
+    
+    ListNode* merge(ListNode *a, ListNode* b){
         if(!a) return b;
         if(!b) return a;
-        ListNode *temp = NULL;
         if(a->val <= b->val){
-            temp = a;
-            temp->next = merge(a->next,b);
+            a->next = merge(a->next,b); 
+            return a;
         }
         else{
-            temp = b;
-            temp->next = merge(a,b->next);
+            b->next = merge(a,b->next);
+            return b;
         }
-        return temp;
     }
+    
+    
     
     
     
     ListNode* mergeKLists(vector<ListNode*>& lists) {
         if(lists.size() == 0) return NULL;
-        if(lists.size() == 1) return lists[0];
-        ListNode *ans = NULL;
-        for(auto l:lists){
-            ans = merge(ans,l);
+        // merge two lists and compare it with the third one 
+        ListNode *ans = lists[0];
+        for(int i = 1; i < lists.size(); i++){
+            ans = merge(ans,lists[i]);
         }
         return ans;
     }
