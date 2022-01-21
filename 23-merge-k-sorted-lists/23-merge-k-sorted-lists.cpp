@@ -11,31 +11,53 @@
 class Solution {
 public:
     
-    
-    ListNode* merge(ListNode *a, ListNode* b){
+    ListNode* merge(ListNode* a, ListNode* b){
         if(!a) return b;
         if(!b) return a;
+        ListNode *temp = NULL;
         if(a->val <= b->val){
-            a->next = merge(a->next,b); 
-            return a;
+            temp = a;
+            temp->next = merge(a->next,b);
+            return temp;
         }
         else{
-            b->next = merge(a,b->next);
-            return b;
+            temp = b;
+            temp->next = merge(a,b->next);
+            return temp;
         }
     }
     
     
     
     
+    ListNode* mergeLists(vector<ListNode*>&lists,int k){
+        while(k != 0){
+            int i = 0;
+            int j = k;
+            while(i < j){
+                lists[i] = merge(lists[i],lists[j]);
+                i++;
+                j--;
+                if(i >= j){
+                    k = j;
+                }
+            }
+        }
+        return lists[0];
+    }
+    
+    
+    
     
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        if(lists.size() == 0) return NULL;
-        // merge two lists and compare it with the third one 
-        ListNode *ans = lists[0];
-        for(int i = 1; i < lists.size(); i++){
-            ans = merge(ans,lists[i]);
+        if(lists.size() == 0){
+            return NULL;    
         }
+        if(lists.size() == 1){
+            return lists[0];
+        }
+        int k = lists.size()-1;
+        ListNode*ans = mergeLists(lists,k);
         return ans;
     }
 };
