@@ -1,30 +1,23 @@
 class Solution {
 public:
-    
-    int mod = 1000000007;
-    
     int knightDialer(int n) {
-        
-        vector<vector<int>> paths = { {4, 6}, {6, 8}, {7, 9}, {4, 8}, {3, 9, 0}, {}, {1, 7, 0}, {2, 6}, {1, 3}, {4, 2}};
-        int answer = 0;
-        vector<vector<int>>dp(n+1,vector<int>(10,-1));
+        int mod = 1000000007;
+        vector<vector<int>>paths={{4,6},{6,8},{7,9},{4,8},{0,3,9},{},{0,1,7},{2,6},{1,3},{2,4}}; 
+        vector<vector<int>>dp(n+1,vector<int>(10,0));
+        for(int i = 1; i <= n; i++){
+            for(int j = 0; j <= 9; j++){
+                if(i == 1){
+                    dp[i][j] = 1;
+                }        
+                for(auto k:paths[j]){
+                    dp[i][j] = (dp[i][j] + dp[i-1][k]) % mod; 
+                }
+            }
+        }
+        int ans = 0;
         for(int i = 0; i <= 9; i++){
-            answer = (answer+ calc(paths,i,n,1,dp)) % mod;
+            ans = (ans + dp[n][i]) % mod;    
         }
-        return answer;
-    }
-    
-    int calc(vector<vector<int>>&paths,int index,int n,int cnt,vector<vector<int>>&dp){
-        if(cnt == n){
-            return dp[cnt][index] = 1;
-        }
-        if(dp[cnt][index] != -1){
-            return dp[cnt][index];
-        }
-        dp[cnt][index] = 0;
-        for(int i = 0; i < paths[index].size(); i++){
-            dp[cnt][index] = (dp[cnt][index]+ calc(paths,paths[index][i],n,cnt+1,dp)) % mod;
-        }
-        return dp[cnt][index];
+        return ans;
     }
 };
