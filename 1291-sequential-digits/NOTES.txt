@@ -1,3 +1,1 @@
-1.**Brute force** solution would to be traverse all the ranges between low and high and determine the number which satisfies the equation of sequential digits O(n ^ 2)
 ​
-2.
