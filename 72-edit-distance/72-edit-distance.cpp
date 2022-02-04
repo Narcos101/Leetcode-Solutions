@@ -1,28 +1,27 @@
 class Solution {
 public:
-    int minDistance(string word1, string word2){
-        vector<vector<int>>dp(word1.size()+1,vector<int>(word2.size()+1,-1));
-        return calc(word1.size()-1,word2.size()-1,word1,word2,dp);
-    }
-
-    int calc(int i, int j, string&word1, string&word2,vector<vector<int>>&dp){
-        if(i == -1){
-            return j+1;    
+    int minDistance(string word1, string word2) {
+        vector<vector<int>>dp(word1.size()+1,vector<int>(word2.size()+1,0));
+        for(int i = 0; i <= word1.size(); i++){
+            dp[i][0] = i;
+            
         }
-        if(j == -1){
-            return i+1;
+        for(int j = 0; j <= word2.size(); j++){
+            dp[0][j] = j;
         }
-        if(dp[i][j] != -1){
-            return dp[i][j];
+        for(int i = 1; i <= word1.size(); i++){
+            for(int j = 1;j <= word2.size(); j++){
+                if(word1[i-1] == word2[j-1]){
+                    dp[i][j] = dp[i][j] + dp[i-1][j-1];
+                }
+                else{
+                    int add = dp[i][j-1];
+                    int replace = dp[i-1][j-1];
+                    int deletee = dp[i-1][j];
+                    dp[i][j] = 1 + min(add,min(replace,deletee));
+                }
+            }
         }
-        if(word1[i] == word2[j]){
-            return dp[i][j] = calc(i-1,j-1,word1,word2,dp);
-        }
-        else{
-            int add = calc(i,j-1,word1,word2,dp);
-            int replace = calc(i-1,j-1,word1,word2,dp);
-            int deleted = calc(i-1,j,word1,word2,dp);
-            return dp[i][j] = 1 + min(add,min(replace,deleted));
-        }
+        return dp[word1.size()][word2.size()];
     }
 };
