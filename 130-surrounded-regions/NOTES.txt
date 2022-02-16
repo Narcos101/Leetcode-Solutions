@@ -1,0 +1,2 @@
+1.On 0th rows and 0th columns skip '0'
+2.
