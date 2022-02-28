@@ -31,24 +31,6 @@
 [8,9] --&gt; "8-&gt;9"
 </pre>
 
-<p><strong>Example 3:</strong></p>
-
-<pre><strong>Input:</strong> nums = []
-<strong>Output:</strong> []
-</pre>
-
-<p><strong>Example 4:</strong></p>
-
-<pre><strong>Input:</strong> nums = [-1]
-<strong>Output:</strong> ["-1"]
-</pre>
-
-<p><strong>Example 5:</strong></p>
-
-<pre><strong>Input:</strong> nums = [0]
-<strong>Output:</strong> ["0"]
-</pre>
-
 <p>&nbsp;</p>
 <p><strong>Constraints:</strong></p>
 
