@@ -10,41 +10,35 @@ using namespace std;
 
 class Solution{
     public:
-    void calc(vector<vector<int>> &m, int n,vector<string>&ans,vector<vector<int>>vis,string s,int i, int j){
-        if(i == n-1 && j == n-1){
+    void calc(vector<vector<int>> &m, int n,vector<string>&ans,vector<vector<int>>&vis,string s,int row, int col,vector<vector<int>>&dir){
+        if(row == n-1 && col == n-1){
             ans.push_back(s);
             return;
         }
-        if(i + 1 < n && m[i+1][j] == 1 && vis[i+1][j] == 0){
-            vis[i][j] = 1;
-            calc(m,n,ans,vis,s + "D",i+1,j);
-            vis[i][j] = 0;
+        string temp = "DRUL";
+        int i = row;
+        int j = col;
+        for(int k = 0; k < dir.size(); k++){
+            i = row + dir[k][0];
+            j = col + dir[k][1];
+            if(i < n && i >= 0 && j < n && j >= 0 && vis[i][j] == 0 && m[i][j] == 1){
+                vis[row][col] = 1;
+                calc(m,n,ans,vis,s + temp[k],i,j,dir);
+                vis[row][col] = 0;
+            }
         }
-        if(j + 1 < n && m[i][j+1] == 1 && vis[i][j+1] == 0){
-            vis[i][j] = 1;
-            calc(m,n,ans,vis,s + "R",i,j+1);
-            vis[i][j] = 0;
-        }
-        if(i-1 >= 0 && m[i-1][j] == 1 && vis[i-1][j] == 0){
-            vis[i][j] = 1;
-            calc(m,n,ans,vis,s + "U",i-1,j);
-            vis[i][j] = 0;
-        }
-        if(j-1 >= 0 && m[i][j-1] == 1 && vis[i][j-1] == 0){
-            vis[i][j] = 1;
-            calc(m,n,ans,vis,s + "L",i,j-1);
-            vis[i][j] = 0;
-        }
+        
     }
     
 
     vector<string> findPath(vector<vector<int>> &m, int n) {
        vector<string>ans;
        vector<vector<int>>vis(n,vector<int>(n,0));
+       vector<vector<int>>dir = {{1,0}, {0,1}, {-1,0}, {0,-1}};
        if(m[0][0] == 0){
            return ans;
        }
-       calc(m,n,ans,vis,"",0,0);
+       calc(m,n,ans,vis,"",0,0,dir);
        return ans;
         
     }
