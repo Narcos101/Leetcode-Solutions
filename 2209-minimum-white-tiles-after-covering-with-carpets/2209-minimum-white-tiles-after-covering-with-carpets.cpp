@@ -1,30 +1,18 @@
 class Solution {
-    int dfs(string &floor, int Carpets, int Len, int idx, vector<vector<int>> &dp)
-    {
-        if(idx >= floor.size())
-            return 0;
-        int val = 0;
-        if(dp[idx][Carpets] != -1) return dp[idx][Carpets];
-        if(Carpets == 0)
-        {
-            for(int i = idx; i < floor.size(); i++)
-                if(floor[i] == '1') val++;
-        }
-        else
-        {
-            if(floor[idx] == '0')
-                val = dfs(floor, Carpets, Len, idx+1, dp);
-            else
-            {
-                val = min(1+dfs(floor, Carpets, Len, idx+1, dp), dfs(floor, Carpets-1, Len, idx+Len, dp));
-            }
-        }
-        return dp[idx][Carpets] = val;
-    }
 public:
     int minimumWhiteTiles(string floor, int numCarpets, int carpetLen) {
-        int n = floor.size();
-        vector<vector<int>> dp(n+1, vector<int> (numCarpets+1, -1));
-        return dfs(floor, numCarpets, carpetLen, 0, dp);
+        int n = floor.length();
+        vector<int> dp(n,  0), ndp(n, 0);
+        for(int i = 0; i < n; i++) {
+            dp[i] = (i ? dp[i-1] : 0) + floor[i] - '0';
+        }
+        for(int i = 1; i <= numCarpets; i++) {
+            for(int j = 0; j < n; j++) {
+                ndp[j] =  (j ? ndp[j-1]: 0) + floor[j] - '0';
+                ndp[j] = (j < carpetLen) ? 0 : min(ndp[j], dp[j - carpetLen]);
+            }
+            dp = ndp;
+        }
+        return dp[n-1];
     }
 };
