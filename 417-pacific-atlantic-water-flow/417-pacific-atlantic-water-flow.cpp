@@ -1,27 +1,53 @@
 class Solution {
 public:
-    int m, n;
-	// denotes cells reachable starting from atlantic and pacific edged cells respectively
-    vector<vector<bool> > atlantic, pacific;
-	vector<vector<int> > ans;    
-    vector<vector<int> > pacificAtlantic(vector<vector<int>>& mat) {
-        if(!size(mat)) return ans;
-        m = size(mat), n = size(mat[0]);
-        atlantic = pacific = vector<vector<bool> >(m, vector<bool>(n, false));
-		// perform dfs from all edge cells (ocean-connected cells)
-        for(int i = 0; i < m; i++) dfs(mat, pacific,i, 0), dfs(mat, atlantic, i, n - 1);
-        for(int i = 0; i < n; i++) dfs(mat, pacific, 0, i), dfs(mat, atlantic, m - 1, i);     
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
+        vector<vector<int>> ans;
+        int n = heights.size();
+        int m = heights[0].size();
+        queue<pair<int,int>>q;
+        vector<vector<int>>vis(n,vector<int>(m,0));
+        vector<vector<int>>vis2(n,vector<int>(m,0));
+        queue<pair<int,int>>q2;
+        for(int i = 0; i < m;i++){
+            q2.push({n-1,i});
+            q.push({0,i});
+        }
+        for(int j = 1; j < n;j++){
+            q2.push({j-1,m-1});
+            q.push({j,0});
+        }
+        calc(q,vis,heights);
+        calc(q2,vis2,heights);
+        for(int i =0; i < n;i++){
+            for(int j = 0; j < m;j++){
+                if(vis[i][j] == 1 && vis2[i][j] == 1){
+                    ans.push_back({i,j});
+                }
+            }
+        }
         return ans;
     }
-    void dfs(vector<vector<int> >& mat, vector<vector<bool> >& visited, int i, int j){        
-        if(visited[i][j]) return;
-        visited[i][j] = true;
-		// if cell reachable from both the oceans, insert into final answer vector
-        if(atlantic[i][j] && pacific[i][j]) ans.push_back(vector<int>{i, j});    
-		// dfs from current cell only if height of next cell is greater
-/*⬇️*/  if(i + 1 <  m && mat[i + 1][j] >= mat[i][j]) dfs(mat, visited, i + 1, j); 
-/*⬆️*/  if(i - 1 >= 0 && mat[i - 1][j] >= mat[i][j]) dfs(mat, visited, i - 1, j);
-/*➡️*/  if(j + 1 <  n && mat[i][j + 1] >= mat[i][j]) dfs(mat, visited, i, j + 1); 
-/*⬅️*/  if(j - 1 >= 0 && mat[i][j - 1] >= mat[i][j]) dfs(mat, visited, i, j - 1);
+    void calc(queue<pair<int,int>>q,vector<vector<int>>&vis,vector<vector<int>>&heights){
+        int n = heights.size();
+        int m = heights[0].size();
+        while(!q.empty()){
+            auto nq = q.front();
+            int f = nq.first;
+            int s = nq.second;
+            vis[f][s] = 1;
+            q.pop();
+            if(f-1 >= 0 && vis[f-1][s] == 0 && heights[f-1][s] >= heights[f][s]){
+                q.push({f-1,s});
+            }
+            if(f+1 < n && vis[f+1][s] == 0 && heights[f+1][s] >= heights[f][s]){
+                q.push({f+1,s});
+            }
+            if(s-1 >= 0 && vis[f][s-1] == 0 && heights[f][s-1] >= heights[f][s]){
+                q.push({f,s-1});
+            }
+            if(s+1 < m && vis[f][s+1] == 0 && heights[f][s+1] >= heights[f][s]){
+                q.push({f,s+1});
+            }
+        }
     }
 };
