@@ -1,33 +1,42 @@
 class Solution {
-public:
-    int maximalRectangle(vector<vector<char>>& M) {
-        if(!size(M)) return 0;
-        int ans = 0, m = size(M), n = size(M[0]);
-        vector<vector<short>> dp(m+1, vector<short>(n+1)), up(m, vector<short>(n,1)), down(up);
-        for(int i = m-1; ~i; i--) 
-            for(int j = n-1; ~j; j--) 
-                dp[i][j] = M[i][j] == '1' ? dp[i][j+1] + 1 : 0;
-        
-        stack<int> s;
-        for(int j = 0; j < n; j++) {
-            s = stack<int>();
-            for(int i = 0; i < m; i++) {
-                while(size(s) && dp[s.top()][j] >= dp[i][j]) s.pop();
-                up[i][j] = i - (size(s) ? s.top() : -1);
-                s.push(i);
-            }
-            s = stack<int>();
-            for(int i = m-1; ~i; i--) {
-                while(size(s) && dp[s.top()][j] >= dp[i][j]) s.pop();
-                down[i][j] = (size(s) ? s.top() : m) - i;
-                s.push(i);
-            }            
-        }
+private:
+	int maxA(vector<int> &a) {
+		int n = a.size();
+		stack<int> st;
+		int left[n], right[n];
 
-        for(int i = 0; i < m; i++) 
-            for(int j = 0; j < n; j++) 
-                ans = max(ans, dp[i][j] * (up[i][j]+down[i][j]-1));
-                    
-        return ans;
-    }
+		for (int i = 0; i < n; ++i) {
+			while (st.size() && a[st.top()] >=  a[i]) st.pop();
+			if (st.empty()) left[i] = -1;
+			else left[i] = st.top();
+			st.push(i);
+		}
+		while (st.size()) st.pop();
+		for (int i = n - 1; i >= 0; --i) {
+			while (st.size() && a[st.top()] >=  a[i]) st.pop();
+			if (st.empty()) right[i] = n;
+			else right[i] = st.top();
+			st.push(i);
+		}
+		long long ans = 0;
+		for (int i = 0; i < n; ++i) {
+			ans = max(ans, a[i] * 1LL * (right[i] - left[i] - 1));
+		}
+		return ans;
+	}
+public:
+	int maximalRectangle(vector<vector<char>>& matrix) {
+		int n = matrix.size(), m = matrix[0].size();
+		vector<int> t(m, 0);
+		int ans = 0;
+		for (int i = 0; i < n; ++i) {
+			for (int j = 0; j < m; ++j) {
+				if (matrix[i][j] == '1') t[j]++;
+				else t[j] = 0;
+			}
+			int cost = maxA(t);
+			ans = max(cost, ans);
+		}
+		return ans;
+	}
 };
