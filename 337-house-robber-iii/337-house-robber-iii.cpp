@@ -11,19 +11,28 @@
  */
 class Solution {
 public:
-    map<TreeNode *,int>mpp;
     int rob(TreeNode* root) {
-        if(root == NULL) return 0;
-        if(mpp[root]) return mpp[root];
-        int val = 0;
+        unordered_map<TreeNode *,int>mpp;
+        return calc(root,mpp);
+    }
+    
+    
+    int calc(TreeNode*root,unordered_map<TreeNode*,int>&mpp){
+        if(root == NULL){
+            return 0;
+        }
+        if(mpp.find(root) != mpp.end()){
+            return mpp[root];
+        }
+        int left = 0;
+        int right = 0;
         if(root->left != NULL){
-            val += rob(root->left->left) + rob(root->left->right);
+            left = calc(root->left->left,mpp) + calc(root->left->right,mpp);
         }
         if(root->right != NULL){
-            val += rob(root->right->left) + rob(root->right->right);
+            right = calc(root->right->left,mpp) + calc(root->right->right,mpp);
         }
-        val = max(val+root->val,rob(root->right)+rob(root->left));
-        mpp[root] = val;
-        return val;
+        return mpp[root] = max(root->val + left + right,calc(root->left,mpp)+calc(root->right,mpp));
     }
+    
 };
