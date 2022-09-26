@@ -2,25 +2,29 @@ class Solution {
 public:
     int distributeCookies(vector<int>& cookies, int k) {
         int n = cookies.size();
-        int i = 0;
-        vector<int>v(k,0);
+        int index = 0;
+        vector<int>v(k+1,0);
         int ans = INT_MAX;
-        int maxx = INT_MIN;
-        calc(n,cookies,v,i,k,maxx,ans);
-        return ans;
+        calc(cookies,k,index,ans,v,0);
+        return ans; 
     }
     
-    
-    void calc(int n,vector<int>&cookies,vector<int>&v,int i,int k,int maxx,int&ans){
-        if(i == cookies.size()){
-            ans = min(ans,maxx);
+    void calc(vector<int>&jobs,int k,int index,int &ans,vector<int>&v,int wt){
+        if(wt >= ans){
             return;
         }
-        for(int j = 0; j < k;j++){
-            v[j] += cookies[i];
-            calc(n,cookies,v,i+1,k,max(maxx,v[j]),ans);
-            v[j] -= cookies[i];
+        if(index == jobs.size()){
+            ans = min(ans,wt);
+            return;
+        }
+        set<int>st;
+        for(int i = 0; i < k;i++){
+            if(st.find(jobs[index]) != st.end()) continue;
+            if(v[i] + jobs[index] >= ans) continue;
+            v[i] += jobs[index];
+            st.insert(v[i]);
+            calc(jobs,k,index+1,ans,v,max(wt,v[i]));
+            v[i] -= jobs[index];
         }
     }
-
 };
