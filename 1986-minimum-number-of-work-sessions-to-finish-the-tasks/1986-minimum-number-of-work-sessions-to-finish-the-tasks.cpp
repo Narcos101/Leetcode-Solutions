@@ -1,45 +1,29 @@
 class Solution {
 public:
-    vector<int> sessions;
-    unordered_map<string , int> dp;
-    
-    string encodeState(int pos, vector<int>& sessions) {
-        vector<int> copy = sessions;
-        sort(copy.begin(), copy.end());
-        
-        string key = to_string(pos) + "$";
-        for (int i = 0; i < copy.size(); i++)
-            key += to_string(copy[i]) + "$";
-        
-        return key;
+    int n, time, allOnes;
+    int ans;
+    int dp[1<<15][16];
+    int minSessions(vector<int>& a, int t) {
+        time = t;
+        n = a.size();
+        allOnes = (1<<n)-1;
+        memset(dp, -1, sizeof dp);
+        ans = help(a, 0, 0);
+        return ans;
     }
     
-    int solve(vector<int>& tasks, int n, int sessionTime, int pos) {
-        if (pos >= n )
-            return 0;
-        
-        string key = encodeState(pos, sessions);
-        
-        if (dp.find(key) != dp.end())
-            return dp[key];
-        
-        sessions.push_back(tasks[pos]);
-        int ans = 1 + solve(tasks, n, sessionTime, pos + 1);
-        sessions.pop_back();
-        
-        for (int i = 0; i < sessions.size();i++) {
-            if (sessions[i] + tasks[pos] <= sessionTime) {
-                sessions[i] += tasks[pos];
-                ans = min(ans, solve(tasks, n, sessionTime, pos + 1));
-                sessions[i] -= tasks[pos];
+    int help(vector<int> &a, int mask, int currTime){
+        if(currTime > time) return INT_MAX;
+        if(mask == allOnes) return 1;
+        if(dp[mask][currTime] != -1) return dp[mask][currTime];
+        int ans = INT_MAX;
+        for(int i = 0 ; i < n ; i++){
+            if( (mask & (1<<i)) == 0){
+                int includeInCurrentSession = help(a, mask | (1<<i), currTime + a[i]);
+                int includeInNextSession = 1 + help(a, mask | (1<<i), a[i]);
+                ans = min({ans, includeInCurrentSession, includeInNextSession});
             }
         }
-        
-        return dp[key] = ans;
-    }
-    
-    int minSessions(vector<int>& tasks, int sessionTime) {
-        int n = tasks.size();
-        return solve(tasks, n, sessionTime, 0);
+        return dp[mask][currTime] = ans;
     }
 };
