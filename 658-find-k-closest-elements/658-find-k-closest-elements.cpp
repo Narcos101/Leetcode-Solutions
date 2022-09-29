@@ -1,15 +1,10 @@
 class Solution {
 public:
     vector<int> findClosestElements(vector<int>& arr, int k, int x) {
-        // simply a heap 
-        sort(arr.begin(),arr.end(),[&](int a,int b){
-            return abs(a-x) == abs(b-x) ? a < b : abs(a-x) < abs(b-x);
-        });
-        vector<int>ans;
-        for(int i = 0; i < k;i++){
-            ans.push_back(arr[i]);
-        }
-        sort(ans.begin(),ans.end());
-        return ans;
+        int L = 0, R = size(arr)-1;
+        while (R - L >= k) 
+            if (x - arr[L] <= arr[R] - x) R--;
+            else L++;
+        return vector<int>(begin(arr) + L, begin(arr) + R + 1);
     }
 };
