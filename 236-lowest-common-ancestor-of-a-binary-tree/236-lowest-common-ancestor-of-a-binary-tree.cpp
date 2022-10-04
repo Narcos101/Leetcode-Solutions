@@ -10,28 +10,32 @@
 class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        // Brute force solution would to be find the path from root to the node and store it for both the nodes.
-        // Then traverse through both the arrays and find the common path between them TC- O(n) && SC-O(n);
-        // a proper solution would be to find the two nodes while traversing together
-        
-        
-        
-        if(root == NULL || root->val == p->val || root->val == q->val){
-            return root;
+        if(root == NULL){
+            return NULL;
         }
-        
-        TreeNode *left = lowestCommonAncestor(root->left,p,q);
-        TreeNode *right = lowestCommonAncestor(root->right,p,q);
-        
-        if(left == NULL){
-            return right;
-        }
-        else if(right == NULL){
-            return left;
-        }
-        else{
-            return root;
-        }
-        
+        TreeNode *ans = NULL;
+        calc(root,p->val,q->val,ans);
+        return ans;
     }
+    
+    int calc(TreeNode *root, int p, int q,TreeNode*&ans){
+        if(root == NULL){
+            return false; 
+        }
+        int ans1 = 0;
+        int left = calc(root->left,p,q,ans);
+        int right = calc(root->right,p,q,ans);
+        ans1 += left + right;
+        if(root->val == p){
+            ans1++;
+        }
+        if(root->val == q){
+            ans1++;
+        }
+        if(ans1 == 2){
+            ans = root;
+            return 0;
+        }
+        return ans1;
+    } 
 };
