@@ -12,19 +12,19 @@
 class Solution {
 public:
     TreeNode* sortedArrayToBST(vector<int>& nums) {
-        int n = nums.size();
-        return calc(nums,0,n-1);
+        int i = 0;
+        int j = nums.size()-1;
+        return calc(nums,i,j);
     }
     
-    
-    TreeNode* calc(vector<int>&nums,int start,int end){
-        if(start > end){
+    TreeNode* calc(vector<int>&nums,int i,int j){
+        if(i > j){
             return NULL;
         }
-        int mid = (start + end)/2;
-        TreeNode* root = new TreeNode(nums[mid]);
-        root->left = calc(nums,start,mid-1);
-        root->right = calc(nums,mid+1,end);
+        int mid = (i + (j-i)/2);
+        TreeNode *root = new TreeNode(nums[mid]);
+        root->left = calc(nums,i,mid-1);
+        root->right = calc(nums,mid+1,j);
         return root;
     }
 };
